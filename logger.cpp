@@ -20,3 +20,6 @@ void logger(Severity level, std::string msg) {
   std::cout << tab[level] << SeverityMap[level] << " Timestamp: " << buffer
             << " " << msg << std::endl;
 }
+
+// TODO implement better logging system
+//
