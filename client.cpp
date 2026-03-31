@@ -5,8 +5,10 @@
 #include <string.h>
 #include <sys/socket.h>
 #include <unistd.h>
-int main() {
+int main(int argc, char *argv[]) {
   char adress[] = "localhost";
+  // ei TODO check the code below and what isthe issue and why it isnt resoleved
+  //
   int server = gethostname(adress, sizeof(adress));
   int clientFd = socket(AF_INET, SOCK_STREAM, 0);
 
