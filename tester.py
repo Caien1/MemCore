@@ -3,6 +3,8 @@ import threading
 import time
 import socket
 
+# """" TODO implement for a sing connection with Custom message """"
+
 
 def socketWorker(client_id, reqPerClient, delay, ip, port):
     reqRecieved = 0
@@ -12,7 +14,6 @@ def socketWorker(client_id, reqPerClient, delay, ip, port):
     # TODO play around wiht those values
     clientFd = socket.socket(socket.AF_INET, socket.SOCK_STREAM, 0)
     clientFd.setblocking(True)
-    clientFd.settimeout(4)
     try:
         clientFd.connect((ip, port))
     except Exception:
@@ -22,7 +23,7 @@ def socketWorker(client_id, reqPerClient, delay, ip, port):
                           "reqRecieved": reqRecieved,
                           "connectionFailed": connectionFailed}
                          )
-
+        time.sleep(5)
     for i in range(reqPerClient):
         message = f"Ping$ {client_id} {i}"
         try:
@@ -82,4 +83,5 @@ for thread in threads:
     thread.join()
 
 print(args)
-print(stats)
+for entry in stats:
+    print(entry)
