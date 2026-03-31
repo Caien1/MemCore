@@ -123,18 +123,29 @@ int main(int argc, char *argv[]) {
                       std::to_string(ntohs(clientAddr.sin_port));
     logger(Severity::LOG, msg);
 
-    int recvLength = recv(clientFd, buffer, sizeof(buffer), 0);
-    if (recvLength < 0) {
-      logger(Severity::ERROR, "recv() Failed");
-      close(clientFd);
-    } else {
-      buffer[recvLength] = '\0';
-      logger(Severity::LOG, buffer);
+    int recvLength = 0;
+
+    while (true) {
+      recvLength = recv(clientFd, buffer, sizeof(buffer), 0);
+      if (recvLength < 0) {
+        logger(Severity::ERROR, "recv() Failed");
+        break;
+      } else if (recvLength == 0) {
+        logger(Severity::LOG,
+               "Client: " + (std::string)inet_ntoa(clientAddr.sin_addr) + ":" +
+                   std::to_string(ntohs(clientAddr.sin_port)) +
+                   " disconnected");
+        break;
+      } else {
+        // TODO Fix logical bugs here
+        //
+
+        buffer[recvLength] = '\0';
+        logger(Severity::LOG, buffer);
+        send(clientFd, buff2, sizeof(buff2), 0);
+      }
     }
-
-    send(clientFd, buff2, sizeof(buff2), 0);
   }
-
   close(serverSocketFd);
   return 0;
 }
