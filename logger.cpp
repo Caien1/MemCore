@@ -5,6 +5,14 @@
 #include <ctime>
 
 enum Severity { LOG, WARNING, ERROR, INFO };
+enum SocketError {
+  SOCKET_CREATION_FAILED,
+  SOCKET_BIND_FAILED,
+  SOCKET_LISTEN_FAILED,
+  SOCKET_ACCEPT_FAILED,
+  SOCKET_SEND_FAILED
+};
+
 void logger(Severity level, std::string msg) {
 
   // TODO check if this method of making time stamps is accurate and append logs
