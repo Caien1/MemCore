@@ -13,7 +13,7 @@ def socketWorker(client_id, reqPerClient, delay, ip, port):
     timeout = 0
     # TODO play around wiht those values
     clientFd = socket.socket(socket.AF_INET, socket.SOCK_STREAM, 0)
-    clientFd.setblocking(True)
+    clientFd.setblocking(False)
     try:
         clientFd.connect((ip, port))
     except Exception:
