@@ -26,7 +26,8 @@ int main(int argc, char *argv[]) {
   server.port = Port;
 
   socketInit(&server);
-  acceptLoop(&server);
+  socketLog(&server);
+  socketAcceptLoop(&server);
   socketClose(&server);
 
   return 0;
