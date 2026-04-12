@@ -1,17 +1,19 @@
 #pragma once
+#include <cstdint>
 #include <iostream>
 
 #include <cmath>
 #include <ctime>
 
-enum Severity { LOG, WARNING, ERROR, INFO };
-enum SocketError {
+enum Severity : uint8_t { LOG, WARNING, ERROR, INFO };
+enum SocketLog : uint8_t {
   SOCKET_CREATION_FAILED,
   SOCKET_BIND_FAILED,
   SOCKET_LISTEN_FAILED,
   SOCKET_ACCEPT_FAILED,
   SOCKET_SEND_FAILED
 };
+enum RecvLog : uint8_t { RECV_FAILED, RECV_DISCONNECTED, RECV_CLIENT_DATA };
 
 void logger(Severity level, std::string msg) {
 
