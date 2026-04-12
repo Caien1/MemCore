@@ -16,11 +16,12 @@ typedef struct {
 typedef struct {
   int port;
   int serverSocket;
+  char buffer[4096];
   bool running; // TODO conccurrency thingy
 
 } RServer;
 
-void log(RServer *server) {
+void socketLog(RServer *server) {
   std::string runningStatus =
       server->running ? std::format("Runnin on port:{} ", server->port)
                       : "Not Running";
@@ -56,6 +57,7 @@ void socketInit(RServer *server) {
                                        // and max simultaneous connections
   if (listenerSucess == 0) {
     logger(Severity::LOG, "Listening");
+    server->running = true;
   } else {
     logger(Severity::ERROR, "Listner failed to Initialise");
     exit(1);
@@ -67,10 +69,9 @@ void socketInit(RServer *server) {
              sizeof(int));
 }
 
-void acceptLoop(RServer *server) {
+void socketAcceptLoop(RServer *server) {
   struct sockaddr_in clientAddr;
   socklen_t clientSize = sizeof(clientAddr);
-  char buffer[1024];
   char buff2[] = "pong";
   for (;;) {
     int clientFd = accept(server->serverSocket, (struct sockaddr *)&clientAddr,
@@ -87,7 +88,7 @@ void acceptLoop(RServer *server) {
     int recvLength = 0;
 
     while (true) {
-      recvLength = recv(clientFd, buffer, sizeof(buffer), 0);
+      recvLength = recv(clientFd, server->buffer, sizeof(server->buffer), 0);
       if (recvLength < 0) {
         logger(Severity::ERROR, std::format("Recv Failed for {}:{}",
                                             inet_ntoa(clientAddr.sin_addr),
@@ -100,11 +101,10 @@ void acceptLoop(RServer *server) {
                                            ntohs(clientAddr.sin_port)));
         break;
       } else {
-        // TODO Fix logical bugs here
-        //
 
-        buffer[recvLength] = '\0';
-        logger(Severity::LOG, buffer);
+        server->buffer[recvLength] = '\0';
+        // TODO parse what is sent in the buffer
+        logger(Severity::LOG, server->buffer);
         send(clientFd, buff2, sizeof(buff2), 0);
       }
     }
