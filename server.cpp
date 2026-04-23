@@ -21,6 +21,12 @@ typedef struct {
 
 } RServer;
 
+void socketLog(RServer *);
+void socketInit(RServer *);
+void socketAcceptLoop(RServer *);
+void socketAcceptLoop(RServer *);
+void socketClose(RServer *);
+
 void socketLog(RServer *server) {
   std::string runningStatus =
       server->running ? std::format("Runnin on port:{} ", server->port)
@@ -101,7 +107,6 @@ void socketAcceptLoop(RServer *server) {
                                            ntohs(clientAddr.sin_port)));
         break;
       } else {
-
         server->buffer[recvLength] = '\0';
         // TODO parse what is sent in the buffer
         logger(Severity::LOG, server->buffer);

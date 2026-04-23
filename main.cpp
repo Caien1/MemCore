@@ -25,7 +25,7 @@ int main(int argc, char *argv[]) {
   RServer server = {};
   server.port = Port;
 
-  socketInit(&server);
+  socketInit(&server); // initialises
   socketLog(&server);
   socketAcceptLoop(&server);
   socketClose(&server);
